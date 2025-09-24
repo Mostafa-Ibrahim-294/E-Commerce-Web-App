@@ -1,0 +1,11 @@
+﻿<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script type="text/javascript">
+    @if (TempData["error"] != null)
+    {
+        <text>toastr.error('@TempData["error"]');</text>
+    }
+    else if (TempData["success"] != null)
+    {
+        <text>toastr.success('@TempData["success"]');</text>
+	}
+</script>

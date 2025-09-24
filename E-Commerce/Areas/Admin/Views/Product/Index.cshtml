@@ -1,0 +1,61 @@
+﻿@model IEnumerable<ProductVM>
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-6">
+            <h2>Product List</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">Create New Product</a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-bordered table-hover text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>Product Title</th>
+            <th>Product Description</th>
+            <th>Product ISBN</th>
+			<th>Product Author</th>
+			<th>Product List Price</th>
+			<th>Product Price From 1-50</th>
+			<th>Product Price From 51-100</th>
+			<th>Product Price over 100</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+				<td>@item.Description</td>
+				<td>@item.ISBN</td>
+				<td>@item.Author</td>
+				<td>@item.ListPrice</td>
+				<td>@item.Price</td>
+				<td>@item.Price50</td>
+                <td>@item.Price100</td>
+				<td>@item.CategoryName</td>
+                <td>
+                    <a asp-controller="Product" asp-action="Upsert" asp-route-id="@item.Id" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                </td>
+                <td>
+                    <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ToastrPartial");
+    }
+}

@@ -1,0 +1,55 @@
+@model UserProfileVM
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="bi bi-person-circle"></i> My Profile</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="me-3">
+                        <i class="bi bi-person-circle" style="font-size: 3rem; color: #0d6efd;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">@Model.Username</h5>
+                        <span class="badge bg-secondary">User</span>
+                    </div>
+                </div>
+                <hr />
+                <dl class="row mb-0">
+					<dt class="col-sm-4"><i class="bi bi-envelope"></i> Email</dt>
+					<dd class="col-sm-8">@Model.Email</dd>
+                    <dt class="col-sm-4"><i class="bi bi-geo-alt"></i> Street Address</dt>
+                    <dd class="col-sm-8">@Model.StreetAddress</dd>
+
+                    <dt class="col-sm-4"><i class="bi bi-building"></i> City</dt>
+                    <dd class="col-sm-8">@Model.City</dd>
+
+                    <dt class="col-sm-4"><i class="bi bi-flag"></i> State</dt>
+                    <dd class="col-sm-8">@Model.State</dd>
+
+                    <dt class="col-sm-4"><i class="bi bi-mailbox"></i> Postal Code</dt>
+                    <dd class="col-sm-8">@Model.PostalCode</dd>
+                </dl>
+                <div class="mt-4">
+                    <a asp-action="EditProfile" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-pencil-square"></i> Edit Profile
+                    </a>
+                </div>
+                <form asp-action="DeleteAccount" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="bi bi-trash"></i> Delete Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+	<partial name="_ToastrPartial" />
+}

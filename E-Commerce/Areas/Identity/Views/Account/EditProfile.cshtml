@@ -1,0 +1,57 @@
+@model UserProfileVM
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header text-center">
+                <h4><i class="bi bi-pencil-square"></i> Edit Profile</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditProfile" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+						<span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    <div class="mb-3">
+                        <label asp-for="StreetAddress" class="form-label"></label>
+                        <input asp-for="StreetAddress" class="form-control" />
+                        <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="State" class="form-label"></label>
+                        <input asp-for="State" class="form-control" />
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="PostalCode" class="form-label"></label>
+                        <input asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary w-100 mb-2">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                    <a asp-action="ChangePassword" class="btn btn-outline-warning w-100 mt-2">
+                        <i class="bi bi-key"></i> Change Password
+                    </a>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
