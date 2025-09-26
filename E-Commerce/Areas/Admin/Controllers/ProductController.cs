@@ -49,8 +49,10 @@ public class ProductController : Controller
             {
                 // Create
                 result = await productService.CreateProductAsync(productVM, formFile);
-                if (result)
+                if (result && await productService.SaveAsync())
+                {
                     TempData["success"] = "Item created successfully";
+                }
                 else
                     TempData["error"] = "Couldn't create item";
             }
@@ -58,8 +60,10 @@ public class ProductController : Controller
             {
                 // Update
                 result = await productService.UpdateProductAsync(productVM, formFile);
-                if (result)
+                if (result && await productService.SaveAsync())
+                {
                     TempData["success"] = "Item updated successfully";
+                }
                 else
                     TempData["error"] = "Couldn't update item";
             }
@@ -81,7 +85,7 @@ public class ProductController : Controller
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var result = await productService.DeleteProductAsync(id);
-        if (result)
+        if (result && await productService.SaveAsync())
         {
             TempData["success"] = "Item Removed successfully";
         }

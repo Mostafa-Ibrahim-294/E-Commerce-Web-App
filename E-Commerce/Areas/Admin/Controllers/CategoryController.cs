@@ -34,9 +34,16 @@ namespace E_Commerce.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 await categoryRepository.CreateAsync(category);
-                await categoryRepository.SaveAsync();
-                TempData["success"] = "item created successfully";
-                return RedirectToAction(nameof(Index));
+                if(await categoryRepository.SaveAsync())
+                {
+                    TempData["success"] = "item created successfully";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["error"] = "Error while creating item";
+                    return View(category);
+                }
             }
             TempData["error"] = "Error while creating item";
             return View(category);
@@ -53,9 +60,16 @@ namespace E_Commerce.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 categoryRepository.Update(category);
-                await categoryRepository.SaveAsync();
-                TempData["success"] = "item updated successfully";
-                return RedirectToAction(nameof(Index));
+                if (await categoryRepository.SaveAsync())
+                {
+                    TempData["success"] = "item updated successfully";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["error"] = "Error while updating item";
+                    return View(category);
+                }
             }
             TempData["error"] = "Error while updating item";
             return View(category);
@@ -75,7 +89,8 @@ namespace E_Commerce.Areas.Admin.Controllers
                 return NotFound();
             }
             categoryRepository.Delete(category);
-            await categoryRepository.SaveAsync();
+            if (!await categoryRepository.SaveAsync())
+                return NotFound();
             return RedirectToAction(nameof(Index));
         }
     }

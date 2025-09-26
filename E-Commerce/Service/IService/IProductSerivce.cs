@@ -1,4 +1,5 @@
-﻿using E_Commerce.ViewModels;
+﻿using E_Commerce.Models;
+using E_Commerce.ViewModels;
 
 namespace E_Commerce.Service.IService
 {
@@ -10,6 +11,7 @@ namespace E_Commerce.Service.IService
         Task<bool> UpdateProductAsync(ProductVM productVM , IFormFile formFile);
         Task<bool> DeleteProductAsync(int id);
         Task<List<CategoryVM>> GetCategoriesAsync();
+        Task<bool> SaveAsync();
     }
 }
 

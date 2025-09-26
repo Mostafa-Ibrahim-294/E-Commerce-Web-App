@@ -72,7 +72,6 @@ namespace E_Commerce.Service
             }
             var product = MapToEntity(productVM);
             _productRepository.Update(product);
-            await _productRepository.SaveAsync();
             return true;
         }
 
@@ -83,7 +82,6 @@ namespace E_Commerce.Service
             if(!_fileService.DeleteFile(product.ImageUrl))
                 return false;
             _productRepository.Delete(product);
-            await _productRepository.SaveAsync();
             return true;
         }
 
@@ -131,6 +129,11 @@ namespace E_Commerce.Service
                 ImageUrl = product.ImageUrl,
                 CategoryName = await _categoryRepository.GetCategoryNameByIdAsync(product.CategoryId)
             };
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+           return await _productRepository.SaveAsync();
         }
     }
 }

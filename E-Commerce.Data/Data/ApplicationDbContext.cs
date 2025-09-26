@@ -11,12 +11,15 @@ namespace E_Commerce.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Cart> carts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.Entity<ApplicationUser>().HasOne(u => u.Company).WithMany(i => i.ApplicationUsers)
+                .HasForeignKey(u => u.CompanyId).IsRequired(false).OnDelete(DeleteBehavior.SetNull);
         }
-
-        }
+     }
 }

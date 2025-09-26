@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class RegisterVM
 {
@@ -28,4 +29,12 @@ public class RegisterVM
     [Required]
     [Display(Name = "Postal Code")]
     public string PostalCode { get; set; }
+
+    [Required]
+    [Display(Name = "Role")]
+    public string Role { get; set; }
+    [Display(Name = "Company")]
+    public int? CompanyId { get; set; }
+    public IEnumerable<SelectListItem>? Roles { get; set; }
+    public IEnumerable<SelectListItem>? Companies { get; set; }
 }

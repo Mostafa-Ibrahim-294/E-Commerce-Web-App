@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using E_Commerce.Models;
 using E_Commerce.ViewModels;
+using E_Commerce.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 
 [Area("Identity")]
@@ -10,21 +12,38 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IUserRegistrationService _userRegistrationService;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AccountController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IUserRegistrationService userRegistrationService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _userRegistrationService = userRegistrationService;
     }
 
     [HttpGet]
-    public IActionResult Register() => View();
+    public IActionResult Register()
+    {
+        var vm = new RegisterVM
+        {
+            Roles = _userRegistrationService.GetRoles(),
+            Companies = _userRegistrationService.GetCompanies()
+        };
+        return View(vm);
+    }
 
     [HttpPost]
     public async Task<IActionResult> Register(RegisterVM model)
     {
-        if (!ModelState.IsValid) return View(model);
-
+        if (!ModelState.IsValid)
+        {
+            model.Roles = _userRegistrationService.GetRoles();
+            model.Companies = _userRegistrationService.GetCompanies();
+            return View(model);
+            }
         var user = new ApplicationUser
         {
             UserName = model.Username,
@@ -32,17 +51,22 @@ public class AccountController : Controller
             StreetAddress = model.StreetAddress,
             City = model.City,
             State = model.State,
-            PostalCode = model.PostalCode
+            PostalCode = model.PostalCode,
+            CompanyId = model.Role == "Company" ? model.CompanyId : null
         };
+
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
         {
-            var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
+            var roleResult = await _userManager.AddToRoleAsync(user, model.Role);
             if (!roleResult.Succeeded)
             {
                 foreach (var error in roleResult.Errors)
                     ModelState.AddModelError("", error.Description);
+
+                model.Roles = _userRegistrationService.GetRoles();
+                model.Companies = _userRegistrationService.GetCompanies();
                 return View(model);
             }
             await _signInManager.SignInAsync(user, isPersistent: false);
@@ -51,6 +75,8 @@ public class AccountController : Controller
         foreach (var error in result.Errors)
             ModelState.AddModelError("", error.Description);
 
+        model.Roles = _userRegistrationService.GetRoles();
+        model.Companies = _userRegistrationService.GetCompanies();
         return View(model);
     }
 

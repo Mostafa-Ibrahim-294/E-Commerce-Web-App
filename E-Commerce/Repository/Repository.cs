@@ -40,9 +40,17 @@ namespace E_Commerce.Repository
         {
             dbSet.Update(entity);
         }
-        public async Task SaveAsync()
+        public async Task<bool> SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

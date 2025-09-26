@@ -10,6 +10,6 @@ namespace E_Commerce.Repository.IRepository
         IQueryable<T> GetAll();
         void Update(T entity);
         void Delete(T entity);
-        Task SaveAsync();
+        Task<bool> SaveAsync();
     }
 }
