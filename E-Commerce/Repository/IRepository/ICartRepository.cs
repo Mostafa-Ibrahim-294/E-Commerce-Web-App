@@ -4,5 +4,6 @@ namespace E_Commerce.Repository.IRepository
 {
     public interface ICartRepository : IRepository<Cart>
     {
+        void RemoveAll(IEnumerable<Cart> carts);
     }
 }

@@ -4,6 +4,7 @@ using E_Commerce.Models;
 using E_Commerce.Repository.IRepository;
 using E_Commerce.Service.IService;
 using E_Commerce.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Service
@@ -11,9 +12,11 @@ namespace E_Commerce.Service
     public class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
-        public CartService(ICartRepository cartRepository)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public CartService(ICartRepository cartRepository , UserManager<ApplicationUser> userManager)
         {
             _cartRepository = cartRepository;
+            _userManager = userManager;
         }
         public async Task<bool> AddToCartAsync(CartVM cartVM , string userId)
         {
@@ -27,9 +30,9 @@ namespace E_Commerce.Service
            await _cartRepository.SaveAsync();
             return true;
         }
-        public Task<bool> RemoveFromCartAsync(int productId, string userId)
+        public void RemoveFromCart(Cart cart)
         {
-            throw new NotImplementedException();
+             _cartRepository.Delete(cart);
         }
         public Task<Cart> GetAsync(Expression<Func<Cart, bool>> filter)
         {
@@ -47,7 +50,8 @@ namespace E_Commerce.Service
             {
                 total += CalcOrderTotal(cart.Count, cart.Product);
             }
-            return new CartWithOrderVM { carts = currentCarts , OrderTotal = total };
+            var user = _cartRepository.GetAll().Where(filter).Select(x => x.ApplicationUser).FirstOrDefault();
+            return new CartWithOrderVM { carts = currentCarts , OrderTotal = total , ApplicationUser = user };
 
         }
 
@@ -63,6 +67,12 @@ namespace E_Commerce.Service
             if (quantity > 50)
                 return quantity * product.Price50;
             return quantity * product.Price;
+        }
+
+        public void RemoveAllCarts(Expression<Func<Cart, bool>> filter)
+        {
+            var carts = _cartRepository.GetAll().Where(filter);
+            _cartRepository.RemoveAll(carts);
         }
     }
 }

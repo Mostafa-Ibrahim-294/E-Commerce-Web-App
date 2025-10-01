@@ -6,6 +6,7 @@ using E_Commerce.Repository.IRepository;
 using E_Commerce.Service.IService;
 using E_Commerce.Service;
 using Microsoft.AspNetCore.Identity;
+using X.Paymob.CashIn;
 
 
 
@@ -20,9 +21,15 @@ namespace E_Commerce
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddPaymobCashIn(config =>
+            {
+                config.ApiKey = builder.Configuration["Paymob:ApiKey"];
+                config.Hmac = builder.Configuration["Paymob:Hmac"];
+            });
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+            builder.Services.AddScoped<IPaymobPaymentService, PaymobPaymentService>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IFileService, FileService>();
@@ -30,6 +37,9 @@ namespace E_Commerce
             builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
             builder.Services.AddScoped<ICartRepository, CartRepository>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();    
+            builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
+            builder.Services.AddScoped<IOrderService , OrderService>();
 
             var app = builder.Build();
 

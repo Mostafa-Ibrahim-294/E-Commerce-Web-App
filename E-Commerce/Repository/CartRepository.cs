@@ -11,5 +11,10 @@ namespace E_Commerce.Repository
         {
             _db = db;
         }
+
+        public void RemoveAll(IEnumerable<Cart> carts)
+        {
+            dbSet.RemoveRange(carts);
+        }
     }
 }

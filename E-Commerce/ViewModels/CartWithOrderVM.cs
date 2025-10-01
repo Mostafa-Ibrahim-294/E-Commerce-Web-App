@@ -6,5 +6,6 @@ namespace E_Commerce.ViewModels
     {
         public IEnumerable<Cart> carts { get; set; } = Enumerable.Empty<Cart>();
         public decimal OrderTotal { get; set; }
+        public ApplicationUser ApplicationUser { get; set; } = null!;
     }
 }
